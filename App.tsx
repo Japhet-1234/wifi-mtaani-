@@ -29,12 +29,11 @@ const App: React.FC = () => {
   const handleActivateVoucher = (e: React.FormEvent) => {
     e.preventDefault();
     const vouchers: Voucher[] = JSON.parse(localStorage.getItem('mtaani_vouchers') || '[]');
-    const found = vouchers.find(v => v.code === voucherCode && !v.isUsed);
+    const found = vouchers.find(v => v.code.toUpperCase() === voucherCode.toUpperCase() && !v.isUsed);
 
     if (found) {
-      // Update "Database" with tracing info
       const updated = vouchers.map(v => 
-        v.code === voucherCode 
+        v.code.toUpperCase() === voucherCode.toUpperCase() 
           ? { ...v, isUsed: true, usedAt: new Date().toISOString() } 
           : v
       );
@@ -43,7 +42,6 @@ const App: React.FC = () => {
       setVoucherStatus({ type: 'success', msg: 'Hongera! Code imekubaliwa.' });
       setVoucherCode('');
       
-      // Transition to connected state
       setTimeout(() => {
         setIsConnected(true);
       }, 800);
@@ -54,7 +52,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen font-sans bg-white flex flex-col">
-      {/* Unified Navigation Bar */}
+      {/* Navigation */}
       <nav className="bg-mtaaniBrown text-mtaaniGrey sticky top-0 z-[100] shadow-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -81,7 +79,6 @@ const App: React.FC = () => {
         </div>
       </nav>
 
-      {/* Content Area */}
       <main className="flex-1">
         {activeTab === 'customer' ? (
           <div className="animate-in fade-in duration-500">
@@ -90,8 +87,8 @@ const App: React.FC = () => {
                 <div className="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-8 shadow-inner">
                   <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg>
                 </div>
-                <h2 className="text-5xl font-black text-mtaaniBrown mb-4 tracking-tighter">UMEUNGANISHWA!</h2>
-                <p className="text-xl font-bold text-gray-500 max-w-md">Hongera! Sasa unaweza kutumia internet kwa uhuru. Furahia huduma ya WIFI MTAANI.</p>
+                <h2 className="text-5xl font-black text-mtaaniBrown mb-4 tracking-tighter uppercase">Umeunganishwa!</h2>
+                <p className="text-xl font-bold text-gray-500 max-w-md">Hongera! Sasa unaweza kutumia internet kwa uhuru. Furahia huduma bora kutoka WIFI MTAANI.</p>
                 <button 
                   onClick={() => setIsConnected(false)}
                   className="mt-12 px-10 py-4 bg-mtaaniBrown text-mtaaniGrey rounded-full font-black uppercase tracking-widest shadow-xl hover:scale-105 transition-transform"
@@ -106,7 +103,6 @@ const App: React.FC = () => {
                   <div className="max-w-4xl mx-auto relative z-10">
                     <h1 className="text-6xl font-extrabold mb-6 tracking-tight leading-none">Internet Popote</h1>
                     
-                    {/* Voucher Input Box */}
                     <div className="max-w-md mx-auto bg-white/10 p-6 rounded-[2rem] border border-white/20 mb-10">
                       <h3 className="text-sm font-black uppercase tracking-widest mb-4">Ingiza Code hapa</h3>
                       <form onSubmit={handleActivateVoucher} className="flex gap-2">
@@ -132,41 +128,41 @@ const App: React.FC = () => {
                       onClick={() => document.getElementById('steps')?.scrollIntoView({ behavior: 'smooth' })}
                       className="bg-mtaaniGrey text-mtaaniBrown px-10 py-4 rounded-full font-black text-lg hover:bg-white transition-all transform hover:scale-105 shadow-2xl"
                     >
-                      Jinsi ya Kununua
+                      Jinsi ya Kuanza
                     </button>
                   </div>
                 </section>
 
-                {/* Instruction Steps Section */}
-                <section id="steps" className="py-16 px-6 bg-white">
+                {/* Steps */}
+                <section id="steps" className="py-16 px-6 bg-white border-b border-gray-100">
                   <div className="max-w-4xl mx-auto">
                     <div className="text-center mb-12">
                       <h2 className="text-sm font-black text-mtaaniBrown/40 uppercase tracking-[0.3em] mb-2">Hatua Rahisi</h2>
-                      <h3 className="text-3xl font-black text-mtaaniBrown">Jinsi ya kuanza kutumia Wi-Fi</h3>
+                      <h3 className="text-3xl font-black text-mtaaniBrown">Maelekezo ya Kununua</h3>
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                       <div className="text-center">
                         <div className="w-16 h-16 bg-mtaaniGrey text-mtaaniBrown rounded-3xl flex items-center justify-center text-3xl font-black mx-auto mb-6 shadow-lg">1</div>
-                        <h4 className="font-black text-xl mb-2">Chagua</h4>
-                        <p className="text-gray-400 text-sm font-bold leading-relaxed">Chagua kifurushi unachotaka hapa chini.</p>
+                        <h4 className="font-black text-xl mb-2">Chagua Kifurushi</h4>
+                        <p className="text-gray-400 text-sm font-bold leading-relaxed">Chagua kifurushi unachotaka kutumia hapa chini.</p>
                       </div>
                       <div className="text-center">
                         <div className="w-16 h-16 bg-mtaaniGrey text-mtaaniBrown rounded-3xl flex items-center justify-center text-3xl font-black mx-auto mb-6 shadow-lg">2</div>
-                        <h4 className="font-black text-xl mb-2">Lipa & Tuma</h4>
-                        <p className="text-gray-400 text-sm font-bold leading-relaxed">Lipa kiasi sahihi na utume ombi lako kwa SMS.</p>
+                        <h4 className="font-black text-xl mb-2">Lipia & Tuma SMS</h4>
+                        <p className="text-gray-400 text-sm font-bold leading-relaxed">Lipia kiasi husika na utume ombi lako kwa SMS kwa urahisi.</p>
                       </div>
                       <div className="text-center">
                         <div className="w-16 h-16 bg-mtaaniGrey text-mtaaniBrown rounded-3xl flex items-center justify-center text-3xl font-black mx-auto mb-6 shadow-lg">3</div>
-                        <h4 className="font-black text-xl mb-2">Unganisha</h4>
-                        <p className="text-gray-400 text-sm font-bold leading-relaxed">Pokea vocha code, iingize juu na ufurahie internet!</p>
+                        <h4 className="font-black text-xl mb-2">Pata Code & Connect</h4>
+                        <p className="text-gray-400 text-sm font-bold leading-relaxed">Pokea vocha code kwa SMS, iingize hapa juu na ufurahie!</p>
                       </div>
                     </div>
                   </div>
                 </section>
 
-                {/* Packages Section */}
-                <section id="packages" className="bg-mtaaniGrey/50 text-mtaaniBrown py-20 px-6">
+                {/* Packages */}
+                <section id="packages" className="bg-mtaaniGrey/30 text-mtaaniBrown py-20 px-6">
                   <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-16">
                       <h2 className="text-4xl font-black mb-4 tracking-tighter uppercase">Vifurushi vya Wi-Fi</h2>
@@ -198,7 +194,7 @@ const App: React.FC = () => {
                 </section>
 
                 <footer className="bg-mtaaniBrown text-mtaaniGrey/60 py-12 px-6 text-center">
-                  <p className="font-bold text-mtaaniGrey">© 2024 WIFI MTAANI</p>
+                  <p className="font-bold text-mtaaniGrey">© 2024 WIFI MTAANI - HUDUMA YA UHAKIKA</p>
                 </footer>
               </>
             )}

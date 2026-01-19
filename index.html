@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WIFI MTAANI | Management Portal</title>
+    <title>WIFI MTAANI | Internet Yako, Mtaa Wako</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -25,22 +25,55 @@
     "react": "https://esm.sh/react@19.0.0",
     "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
     "@google/genai": "https://esm.sh/@google/genai@1.37.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/"
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
   }
 }
 </script>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800;900&display=swap');
+      
+      :root {
+        --mtaani-accent: #F57C00;
+      }
+
       body { 
         font-family: 'Plus Jakarta Sans', sans-serif; 
         background-color: #FAFAFA;
         margin: 0;
         padding: 0;
         min-height: 100vh;
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
       }
+
       .no-scrollbar::-webkit-scrollbar { display: none; }
-      pre { white-space: pre-wrap; word-wrap: break-word; font-size: 10px; border-radius: 1rem; }
+      
+      /* Custom selection color */
+      ::selection {
+        background: var(--mtaani-accent);
+        color: white;
+      }
+
+      /* Transitions for all interactive elements */
+      button, a, input {
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* Animated gradients for backgrounds */
+      .bg-mesh {
+        background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                          radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                          radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+      }
+
+      /* Smooth animations */
+      @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+      }
+      .animate-float { animation: float 6s ease-in-out infinite; }
     </style>
 </head>
 <body>

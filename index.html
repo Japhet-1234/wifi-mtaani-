@@ -4,7 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WIFI MTAANI | Internet ya Watu</title>
+    <title>WIFI MTAANI | Fast Load</title>
+    <!-- Preload for Speed -->
+    <link rel="modulepreload" href="https://esm.sh/react@^19.2.3">
+    <link rel="modulepreload" href="https://esm.sh/react-dom@^19.2.3/client">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -35,18 +39,19 @@
       body { 
         font-family: 'Inter', sans-serif; 
         -webkit-tap-highlight-color: transparent;
+        background-color: #F5F5F5;
       }
-      .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
       .no-scrollbar::-webkit-scrollbar { display: none; }
+      .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+      .sidebar-transition { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
-<body class="bg-mtaaniGrey text-mtaaniBrown">
+<body>
     <div id="root">
-        <!-- Hapa ndipo React itajipakia. Ukiona blank space, msimbo wa JS bado unajipakia -->
-        <div class="h-screen flex items-center justify-center">
+        <div class="h-screen flex items-center justify-center bg-mtaaniGrey">
             <div class="text-center">
-                <div class="w-12 h-12 border-4 border-mtaaniBrown border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                <p class="font-black uppercase tracking-widest text-xs animate-pulse">WIFI MTAANI INAJIPAKIA...</p>
+                <div class="w-10 h-10 border-4 border-mtaaniBrown border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+                <p class="font-black text-[10px] uppercase tracking-[0.3em] text-mtaaniBrown/40">WIFI MTAANI</p>
             </div>
         </div>
     </div>

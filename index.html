@@ -4,20 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WIFI MTAANI | Instant</title>
-    <!-- Preload for Speed -->
-    <link rel="modulepreload" href="https://esm.sh/react@^19.2.3">
-    <link rel="modulepreload" href="https://esm.sh/react-dom@^19.2.3/client">
-    
+    <title>WIFI MTAANI | Management Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
             colors: {
-              mtaaniBrown: '#5D4037',
-              mtaaniGrey: '#F5F5F5',
-              mtaaniAccent: '#FF9800'
+              mtaaniBrown: '#4E342E',
+              mtaaniGrey: '#FAFAFA',
+              mtaaniAccent: '#F57C00'
             }
           }
         }
@@ -26,31 +22,29 @@
     <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/client": "https://esm.sh/react-dom@^19.2.3/client",
-    "@google/genai": "https://esm.sh/@google/genai@^1.37.0",
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "@google/genai": "https://esm.sh/@google/genai@1.37.0",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/"
   }
 }
 </script>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
       body { 
-        font-family: 'Inter', sans-serif; 
-        -webkit-tap-highlight-color: transparent;
-        background-color: #F5F5F5;
+        font-family: 'Plus Jakarta Sans', sans-serif; 
+        background-color: #FAFAFA;
         margin: 0;
         padding: 0;
+        min-height: 100vh;
       }
       .no-scrollbar::-webkit-scrollbar { display: none; }
-      .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
-      .sidebar-transition { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-      pre { white-space: pre-wrap; word-wrap: break-word; }
+      pre { white-space: pre-wrap; word-wrap: break-word; font-size: 10px; border-radius: 1rem; }
     </style>
 </head>
 <body>
-    <div id="root"></div>
+    <div id="root" style="min-height: 100vh;"></div>
     <script type="module" src="index.tsx"></script>
 </body>
 </html>

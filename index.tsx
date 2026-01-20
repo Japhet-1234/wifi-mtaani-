@@ -10,30 +10,21 @@ interface WifiRequest { id: number; phone: string; pid: string; status: 'PENDING
 
 // --- CONSTANTS ---
 const INITIAL_PKGS: Package[] = [
-  { id: '1', name: 'MASAA SITA (6)', duration: '6 Hours', price: 500, desc: 'Internet bila kikomo kwa masaa sita.' },
-  { id: '2', name: 'SIKU NZIMA (24HRS)', duration: '24 Hours', price: 1000, desc: 'Internet bila kikomo kwa masaa 24.' },
-  { id: '3', name: 'WIKI NZIMA', duration: '7 Days', price: 5000, desc: 'Internet bila kikomo kwa wiki nzima.' }
+  { id: '1', name: 'MASAA SITA (6) BILA KIKOMO', duration: '6 Hours', price: 500, desc: 'Internet ya kasi bila kikomo kwa masaa 6.' },
+  { id: '2', name: 'MASAA 24 BILA KIKOMO', duration: '24 Hours', price: 1000, desc: 'Internet ya kasi bila kikomo kwa siku nzima.' },
+  { id: '3', name: 'WIKI NZIMA BILA KIKOMO', duration: '7 Days', price: 5000, desc: 'Internet ya kasi bila kikomo kwa wiki nzima.' }
 ];
-
-const ROUTER_CONFIG = `
-<!-- PASTE IN ROUTER CAPTIVE PORTAL -->
-<div id="mtaani-login">
-  <h1>WIFI MTAANI</h1>
-  <input type="text" id="vcode" placeholder="ENTER CODE">
-  <button onclick="login()">CONNECT TO WWW</button>
-</div>
-`;
 
 // --- AI SERVICE ---
 const callAI = async (history: any[], prompt: string) => {
   try {
     const key = (process.env.API_KEY) || '';
-    if (!key) return "Msaidizi hayuko hewani.";
+    if (!key) return "Samahani, msaidizi hayuko hewani kwa sasa.";
     const ai = new GoogleGenAI({ apiKey: key });
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: [
-        { role: 'user', parts: [{ text: "Wewe ni msaidizi wa WIFI MTAANI. Saidia wateja masuala ya WiFi na intanet. Namba ya malipo: 0779231924." }] },
+        { role: 'user', parts: [{ text: "Wewe ni msaidizi wa WIFI MTAANI. Saidia wateja masuala ya WiFi na intanet. Namba ya malipo: 0779231924 (M-PESA)." }] },
         ...history.map(m => ({ role: m.role, parts: [{ text: m.content }] })),
         { role: 'user', parts: [{ text: prompt }] }
       ]
@@ -48,11 +39,27 @@ const AdminLogin = ({ onLogin, onBack }: any) => {
   const [pass, setPass] = useState('');
   return (
     <div className="min-h-screen flex items-center justify-center bg-mtaaniBrown p-6">
-      <div className="bg-white p-12 rounded-[3rem] w-full max-w-sm text-center">
+      <div className="bg-white p-12 rounded-[3rem] w-full max-w-sm text-center shadow-2xl">
         <h2 className="text-2xl font-black mb-8 uppercase text-mtaaniBrown">ADMIN LOGIN</h2>
-        <input type="password" placeholder="PASSWORD" className="w-full p-5 bg-gray-50 rounded-2xl mb-6 text-center outline-none border" value={pass} onChange={e => setPass(e.target.value)} />
-        <button onClick={() => pass.toLowerCase() === 'mtaani' ? onLogin() : alert('Error')} className="w-full bg-mtaaniBrown text-white py-5 rounded-2xl font-black uppercase">INGIA</button>
-        <button onClick={onBack} className="mt-8 text-[10px] font-black opacity-30 uppercase">Rudi Nyuma</button>
+        <input 
+          type="password" 
+          placeholder="PASSWORD" 
+          className="w-full p-5 bg-gray-50 rounded-2xl mb-6 text-center outline-none border border-gray-200 focus:border-mtaaniAccent font-bold" 
+          value={pass} 
+          onChange={e => setPass(e.target.value)} 
+        />
+        <button 
+          onClick={() => pass.toLowerCase() === 'mtaani' ? onLogin() : alert('Neno la siri limekosewa!')} 
+          className="w-full bg-mtaaniBrown text-white py-5 rounded-2xl font-black uppercase shadow-lg hover:bg-black transition-all"
+        >
+          INGIA
+        </button>
+        <button 
+          onClick={onBack} 
+          className="mt-8 text-[11px] font-black opacity-70 hover:opacity-100 uppercase tracking-widest text-mtaaniBrown"
+        >
+          Rudi Nyuma
+        </button>
       </div>
     </div>
   );
@@ -72,7 +79,7 @@ const AdminDashboard = ({ onBack }: any) => {
 
   const approve = (req: WifiRequest) => {
     const v = vouchers.find(x => x.pid === req.pid && !x.used);
-    const code = v ? v.code : "EMPTY-" + Math.random().toString(36).substr(2,4).toUpperCase();
+    const code = v ? v.code : Math.random().toString(36).substr(2, 6).toUpperCase();
     const updatedR = requests.map(r => r.id === req.id ? {...r, status: 'DONE', code} : r) as WifiRequest[];
     setRequests(updatedR);
     localStorage.setItem('v_reqs', JSON.stringify(updatedR));
@@ -82,38 +89,50 @@ const AdminDashboard = ({ onBack }: any) => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col md:flex-row">
-      <div className="w-full md:w-64 bg-mtaaniBrown text-white p-8">
+      <div className="w-full md:w-64 bg-mtaaniBrown text-white p-8 shrink-0">
         <h1 className="font-black text-xl mb-12">WIFI MTAANI</h1>
-        <button onClick={onBack} className="text-[10px] font-black opacity-40 uppercase">Logout</button>
+        <button 
+          onClick={onBack} 
+          className="text-[11px] font-black opacity-80 hover:opacity-100 uppercase tracking-widest bg-white/10 w-full py-3 rounded-xl"
+        >
+          Logout
+        </button>
       </div>
       <div className="flex-1 p-8">
-        <h2 className="text-3xl font-black mb-10">MTAANI DASHBOARD</h2>
+        <h2 className="text-3xl font-black mb-10 text-mtaaniBrown">MTAANI DASHBOARD</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {INITIAL_PKGS.map(p => (
-            <div key={p.id} className="bg-white p-8 rounded-3xl border shadow-sm">
-              <p className="text-[10px] font-black opacity-30 mb-2 uppercase">{p.name}</p>
+            <div key={p.id} className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm">
+              <p className="text-[10px] font-black opacity-50 mb-2 uppercase text-mtaaniBrown">{p.name}</p>
               <div className="flex justify-between items-center">
-                <span className="text-3xl font-black">{vouchers.filter(v=>v.pid===p.id && !v.used).length}</span>
-                <button onClick={() => genVoucher(p.id)} className="bg-mtaaniAccent text-white px-4 py-2 rounded-xl text-xs font-black">+</button>
+                <span className="text-3xl font-black text-mtaaniBrown">{vouchers.filter(v=>v.pid===p.id && !v.used).length}</span>
+                <button onClick={() => genVoucher(p.id)} className="bg-mtaaniAccent text-white px-5 py-3 rounded-xl text-xs font-black shadow-md hover:scale-105 transition-transform">+</button>
               </div>
             </div>
           ))}
         </div>
-        <div className="bg-white rounded-3xl p-8 border">
-          <h3 className="font-black mb-6 uppercase">Maombi ya Vocha</h3>
-          {requests.map(r => (
-            <div key={r.id} className="flex justify-between items-center py-4 border-b">
-              <div>
-                <p className="font-black">{r.phone}</p>
-                <p className="text-[10px] opacity-40 uppercase">{INITIAL_PKGS.find(p=>p.id===r.pid)?.name}</p>
+        <div className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm">
+          <h3 className="font-black mb-6 uppercase text-mtaaniBrown">Maombi ya Vocha</h3>
+          <div className="space-y-4">
+            {requests.length > 0 ? requests.map(r => (
+              <div key={r.id} className="flex justify-between items-center py-5 border-b border-gray-50 last:border-0">
+                <div>
+                  <p className="font-black text-mtaaniBrown text-lg">{r.phone}</p>
+                  <p className="text-[10px] opacity-60 uppercase font-bold text-mtaaniBrown">{INITIAL_PKGS.find(p=>p.id===r.pid)?.name}</p>
+                </div>
+                {r.status === 'PENDING' ? (
+                  <button onClick={() => approve(r)} className="bg-mtaaniAccent text-white px-6 py-3 rounded-xl text-[10px] font-black uppercase shadow-md">Approve</button>
+                ) : (
+                  <div className="text-right">
+                    <span className="text-[10px] font-black text-green-600 block mb-1">IMETUMIKA</span>
+                    <span className="text-xs font-mono font-black text-mtaaniBrown bg-gray-100 px-3 py-1 rounded-lg">{r.code}</span>
+                  </div>
+                )}
               </div>
-              {r.status === 'PENDING' ? (
-                <button onClick={() => approve(r)} className="bg-mtaaniAccent text-white px-6 py-2 rounded-xl text-[10px] font-black uppercase">Approve</button>
-              ) : (
-                <span className="text-[10px] font-black text-green-500">{r.code}</span>
-              )}
-            </div>
-          ))}
+            )) : (
+              <p className="py-10 text-center opacity-30 font-black uppercase text-xs tracking-widest">Hakuna maombi mapya</p>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -121,23 +140,34 @@ const AdminDashboard = ({ onBack }: any) => {
 };
 
 const PaymentModal = ({ pkg, phone, setPhone, onBuy, onClose }: any) => (
-  <div className="fixed inset-0 bg-mtaaniBrown/95 flex items-center justify-center p-8 z-[1000]">
-    <div className="bg-white p-12 rounded-[4rem] w-full max-w-md text-center">
-      <h2 className="text-2xl font-black uppercase mb-8">Lipia {pkg.name}</h2>
-      <div className="bg-gray-50 p-8 rounded-3xl mb-8 border-2 border-dashed">
-        <p className="text-[10px] font-black opacity-20 mb-2">LIPA TZS {pkg.price} KWA:</p>
-        <p className="text-3xl font-black">0779231924</p>
+  <div className="fixed inset-0 bg-mtaaniBrown/95 flex items-center justify-center p-8 z-[1000] backdrop-blur-sm">
+    <div className="bg-white p-12 rounded-[4rem] w-full max-w-md text-center shadow-2xl animate-in zoom-in-95 duration-300">
+      <h2 className="text-2xl font-black uppercase mb-8 text-mtaaniBrown">Lipia {pkg.name}</h2>
+      <div className="bg-gray-50 p-8 rounded-3xl mb-8 border-2 border-dashed border-mtaaniBrown/10">
+        <p className="text-[10px] font-black opacity-50 mb-2 uppercase text-mtaaniBrown">LIPA TZS {pkg.price} KWA:</p>
+        <p className="text-4xl font-black text-mtaaniBrown">0779231924</p>
       </div>
-      <input required placeholder="NAMBA YAKO" className="w-full p-5 bg-gray-50 rounded-2xl mb-8 text-center text-xl font-black outline-none border" value={phone} onChange={e => setPhone(e.target.value)} />
-      <button onClick={onBuy} className="w-full bg-mtaaniBrown text-white py-6 rounded-3xl font-black uppercase mb-4">PATA VOCHA</button>
-      <button onClick={onClose} className="text-[10px] font-black opacity-20 uppercase">Ghairi</button>
+      <input 
+        required 
+        placeholder="NAMBA YAKO" 
+        className="w-full p-5 bg-gray-50 rounded-2xl mb-8 text-center text-xl font-black outline-none border border-gray-200 focus:border-mtaaniAccent" 
+        value={phone} 
+        onChange={e => setPhone(e.target.value)} 
+      />
+      <button onClick={onBuy} className="w-full bg-mtaaniBrown text-white py-6 rounded-3xl font-black uppercase mb-6 shadow-xl hover:bg-black transition-all">PATA VOCHA</button>
+      <button 
+        onClick={onClose} 
+        className="text-[11px] font-black opacity-70 hover:opacity-100 uppercase tracking-[0.2em] text-mtaaniBrown border-b border-mtaaniBrown/20"
+      >
+        Ghairi Ombi
+      </button>
     </div>
   </div>
 );
 
 const SupportChat = () => {
   const [open, setOpen] = useState(false);
-  const [msgs, setMsgs] = useState([{ role: 'model', content: 'Habari! Karibu WIFI MTAANI. Unahitaji msaada?' }]);
+  const [msgs, setMsgs] = useState([{ role: 'model', content: 'Habari! Karibu WIFI MTAANI. Unahitaji msaada wowote?' }]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -158,26 +188,29 @@ const SupportChat = () => {
   return (
     <div className="fixed bottom-6 right-6 z-[500]">
       {open ? (
-        <div className="bg-white w-[320px] h-[450px] rounded-[2.5rem] shadow-2xl flex flex-col border overflow-hidden">
-          <div className="bg-mtaaniBrown p-5 text-white flex justify-between items-center font-black text-[10px] uppercase">
-            <span>MSAIDIZI</span>
-            <button onClick={() => setOpen(false)}>X</button>
+        <div className="bg-white w-[320px] h-[450px] rounded-[2.5rem] shadow-2xl flex flex-col border border-gray-200 overflow-hidden">
+          <div className="bg-mtaaniBrown p-5 text-white flex justify-between items-center font-black text-[11px] uppercase tracking-widest">
+            <span>MSAIDIZI AI</span>
+            <button onClick={() => setOpen(false)} className="bg-white/10 w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/20">✕</button>
           </div>
-          <div className="flex-1 overflow-y-auto p-5 space-y-3 bg-gray-50 no-scrollbar text-[11px] font-bold">
+          <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-gray-50 no-scrollbar text-[11px] font-bold">
             {msgs.map((m, i) => (
               <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`p-3 rounded-2xl max-w-[85%] ${m.role === 'user' ? 'bg-mtaaniBrown text-white' : 'bg-white border'}`}>{m.content}</div>
+                <div className={`p-4 rounded-2xl max-w-[85%] shadow-sm ${m.role === 'user' ? 'bg-mtaaniBrown text-white' : 'bg-white border border-gray-100 text-mtaaniBrown'}`}>
+                  {m.content}
+                </div>
               </div>
             ))}
+            {loading && <div className="text-[10px] opacity-40 font-black animate-pulse uppercase">Inajibu...</div>}
             <div ref={scrollRef} />
           </div>
-          <form onSubmit={send} className="p-3 border-t flex gap-2">
-            <input className="flex-1 p-3 bg-gray-100 rounded-xl text-[11px] outline-none" placeholder="Uliza..." value={input} onChange={e => setInput(e.target.value)} />
-            <button className="bg-mtaaniBrown text-white px-4 rounded-xl">➔</button>
+          <form onSubmit={send} className="p-4 bg-white border-t border-gray-100 flex gap-2">
+            <input className="flex-1 p-3 bg-gray-100 rounded-xl text-[11px] outline-none font-bold" placeholder="Uliza swali hapa..." value={input} onChange={e => setInput(e.target.value)} />
+            <button className="bg-mtaaniBrown text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-md">➔</button>
           </form>
         </div>
       ) : (
-        <button onClick={() => setOpen(true)} className="w-16 h-16 bg-mtaaniBrown text-white rounded-full shadow-2xl text-2xl">💬</button>
+        <button onClick={() => setOpen(true)} className="w-16 h-16 bg-mtaaniBrown text-white rounded-full shadow-2xl text-3xl border-4 border-white flex items-center justify-center hover:scale-110 transition-transform">💬</button>
       )}
     </div>
   );
@@ -200,7 +233,7 @@ const App = () => {
       localStorage.setItem('v_stock', JSON.stringify(stock.map((x: any) => x.code === v.code ? {...x, used: true} : x)));
       setConnected(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else { alert('Code imekosewa! Wasiliana na mawakala wetu.'); }
+    } else { alert('Code imekosewa au tayari imetumika! Tafadhali nunua vocha mpya.'); }
   };
 
   const buy = (e: any) => {
@@ -211,56 +244,84 @@ const App = () => {
     localStorage.setItem('v_reqs', JSON.stringify([req, ...reqs]));
     window.location.href = `sms:0779231924?body=Nahitaji ${selPkg.name}. Namba: ${phone}`;
     setSelPkg(null);
-    alert('Ombi limetumwa! Lipia 0779231924 kupata vocha sasa.');
+    alert('Ombi lako limetumwa! Lipia kupitia 0779231924 kupata vocha yako sasa.');
   };
 
   if (view === 'admin') return <AdminLogin onLogin={() => setView('dashboard')} onBack={() => setView('home')} />;
   if (view === 'dashboard') return <AdminDashboard onBack={() => setView('home')} />;
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <nav className="h-20 flex justify-between items-center px-6 md:px-12 fixed w-full z-50 bg-white/80 backdrop-blur-md">
-        <div className="font-black text-xl text-mtaaniBrown flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo({top:0})}>
-          <div className="w-8 h-8 bg-mtaaniBrown text-white flex items-center justify-center rounded-lg">W</div>
-          WIFI MTAANI
+    <div className="min-h-screen flex flex-col bg-white">
+      <nav className="h-20 flex justify-between items-center px-6 md:px-12 fixed w-full z-50 bg-white/90 backdrop-blur-md shadow-sm">
+        <div className="font-black text-xl text-mtaaniBrown flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo({top:0, behavior:'smooth'})}>
+          <div className="w-9 h-9 bg-mtaaniBrown text-white flex items-center justify-center rounded-xl shadow-md">W</div>
+          <span className="tracking-tighter">WIFI MTAANI</span>
         </div>
-        <button onClick={() => setView('admin')} className="text-[10px] font-black opacity-20 uppercase">Admin</button>
+        <button 
+          onClick={() => setView('admin')} 
+          className="text-[11px] font-black opacity-70 hover:opacity-100 uppercase tracking-widest text-mtaaniBrown border border-mtaaniBrown/20 px-4 py-2 rounded-lg"
+        >
+          Admin
+        </button>
       </nav>
 
       {connected ? (
-        <div className="flex-1 flex flex-col items-center justify-center p-8 bg-white text-center">
-          <div className="w-32 h-32 bg-green-500 rounded-full flex items-center justify-center text-4xl mb-8 animate-pulse text-white font-black">WWW</div>
-          <h1 className="text-6xl font-black text-mtaaniBrown mb-4">UKO HEWANI</h1>
-          <p className="text-gray-400 font-bold mb-12 uppercase text-xs tracking-[0.5em]">Furahia Ulimwengu wa Intanet</p>
-          <button onClick={() => setConnected(false)} className="bg-mtaaniBrown text-white px-12 py-5 rounded-2xl font-black uppercase text-sm">ONDOKA</button>
+        <div className="flex-1 flex flex-col items-center justify-center p-8 bg-white text-center animate-in zoom-in-95 duration-500">
+          <div className="w-40 h-40 bg-green-500 rounded-[3rem] flex items-center justify-center text-5xl mb-8 animate-bounce text-white font-black shadow-2xl">WWW</div>
+          <h1 className="text-6xl md:text-8xl font-black text-mtaaniBrown mb-4 tracking-tighter uppercase">UKO HEWANI</h1>
+          <p className="text-gray-400 font-bold mb-12 uppercase text-xs tracking-[0.6em]">Vinjari Ulimwengu wa Intanet</p>
+          <button 
+            onClick={() => setConnected(false)} 
+            className="bg-mtaaniBrown text-white px-16 py-6 rounded-[2rem] font-black uppercase text-sm shadow-2xl hover:scale-105 active:scale-95 transition-all tracking-widest"
+          >
+            ZIMA CONNECTION
+          </button>
         </div>
       ) : (
         <main className="flex-1">
-          <section className="pt-48 pb-32 px-6 bg-mtaaniBrown text-white text-center">
-            <h1 className="text-7xl md:text-[10rem] font-black uppercase tracking-tighter leading-[0.8] mb-12">
-              WIFI <br /> <span className="text-mtaaniAccent">MTAANI</span>
-            </h1>
-            <div className="max-w-xl mx-auto bg-white p-3 rounded-[3rem] shadow-2xl">
-              <form onSubmit={activate} className="flex flex-col md:flex-row gap-2">
-                <input className="flex-1 p-5 text-mtaaniBrown font-black text-center uppercase outline-none text-2xl" placeholder="INGIZA VOCHA" value={vCode} onChange={e => setVCode(e.target.value)} />
-                <button className="bg-mtaaniAccent text-white px-10 py-5 md:py-0 rounded-[2.5rem] font-black uppercase text-lg">WASHA</button>
-              </form>
+          {/* Hero Section */}
+          <section className="pt-48 pb-32 px-6 bg-mtaaniBrown text-white text-center relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-mtaaniAccent/10 rounded-full blur-[100px]"></div>
+            <div className="relative z-10">
+              <h1 className="text-7xl md:text-[11rem] font-black uppercase tracking-tighter leading-[0.8] mb-12 animate-in slide-in-from-bottom-6 duration-700">
+                WIFI <br /> <span className="text-mtaaniAccent">MTAANI</span>
+              </h1>
+              <div className="max-w-xl mx-auto bg-white p-3 rounded-[3rem] shadow-2xl animate-in fade-in duration-1000 delay-200">
+                <form onSubmit={activate} className="flex flex-col md:flex-row gap-2">
+                  <input 
+                    className="flex-1 p-6 text-mtaaniBrown font-black text-center uppercase outline-none text-2xl placeholder:text-gray-200" 
+                    placeholder="WEKA VOCHA" 
+                    value={vCode} 
+                    onChange={e => setVCode(e.target.value)} 
+                  />
+                  <button className="bg-mtaaniAccent text-white px-12 py-6 md:py-0 rounded-[2.5rem] font-black uppercase text-xl shadow-xl hover:bg-black transition-all">WASHA</button>
+                </form>
+              </div>
+              <p className="mt-10 text-[11px] font-black uppercase opacity-60 tracking-[0.4em]">Ingiza code ya vocha yako kuanza kutumia internet</p>
             </div>
-            <p className="mt-8 text-[10px] font-black uppercase opacity-40 tracking-widest">Weka code uanze kuvinjari intanet sasa hivi</p>
           </section>
 
-          <section className="py-24 px-6 max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-black uppercase text-mtaaniBrown">Vifurushi vya Intanet</h2>
-              <p className="text-[10px] font-black opacity-30 uppercase tracking-[0.3em] mt-2">Lipia kwa urahisi mtaani kwako</p>
+          {/* Packages Section */}
+          <section className="py-32 px-6 max-w-6xl mx-auto">
+            <div className="text-center mb-20">
+              <h2 className="text-4xl md:text-6xl font-black uppercase text-mtaaniBrown tracking-tighter">VIFURUSHI VYA MIKALABAZI</h2>
+              <p className="text-[11px] font-black opacity-50 uppercase tracking-[0.5em] mt-4 text-mtaaniBrown">Internet ya kasi bila kikomo kwa kila mtu</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {INITIAL_PKGS.map(p => (
-                <div key={p.id} className="bg-white p-12 rounded-[3.5rem] border hover:border-mtaaniAccent transition-all shadow-xl">
-                  <p className="text-[10px] font-black opacity-20 mb-4 uppercase">{p.duration}</p>
-                  <h3 className="text-2xl font-black mb-4">{p.name}</h3>
-                  <div className="text-5xl font-black mb-10 text-mtaaniBrown">{p.price} <span className="text-xs opacity-20">TZS</span></div>
-                  <button onClick={() => setSelPkg(p)} className="w-full bg-mtaaniBrown text-white py-5 rounded-2xl font-black uppercase text-sm">NUNUA</button>
+                <div key={p.id} className="group bg-white p-12 rounded-[4rem] border border-gray-100 hover:border-mtaaniAccent transition-all duration-500 shadow-xl hover:shadow-2xl hover:-translate-y-2">
+                  <p className="text-[11px] font-black opacity-40 mb-4 uppercase tracking-widest text-mtaaniBrown">{p.duration}</p>
+                  <h3 className="text-2xl font-black mb-4 text-mtaaniBrown">{p.name}</h3>
+                  <p className="text-[10px] font-bold text-gray-400 mb-10 uppercase tracking-widest">{p.desc}</p>
+                  <div className="text-6xl font-black mb-12 text-mtaaniBrown tracking-tighter">
+                    {p.price} <span className="text-sm font-black opacity-30">TZS</span>
+                  </div>
+                  <button 
+                    onClick={() => setSelPkg(p)} 
+                    className="w-full bg-mtaaniBrown text-white py-6 rounded-3xl font-black uppercase text-sm tracking-widest shadow-xl group-hover:bg-mtaaniAccent transition-all"
+                  >
+                    NUNUA SASA
+                  </button>
                 </div>
               ))}
             </div>
@@ -271,9 +332,10 @@ const App = () => {
       {selPkg && <PaymentModal pkg={selPkg} phone={phone} setPhone={setPhone} onBuy={buy} onClose={() => setSelPkg(null)} />}
       <SupportChat />
       
-      <footer className="py-20 bg-gray-50 text-center">
-        <div className="font-black text-mtaaniBrown opacity-20 text-xl uppercase mb-4">WIFI MTAANI</div>
-        <p className="text-[8px] font-black opacity-30 uppercase tracking-widest">&copy; 2024 WIFI MTAANI SERVICES. WWW FOR EVERYONE.</p>
+      <footer className="py-24 bg-gray-50 text-center px-6">
+        <div className="font-black text-mtaaniBrown opacity-30 text-2xl uppercase mb-4 tracking-tighter">WIFI MTAANI</div>
+        <p className="text-[10px] font-black opacity-40 uppercase tracking-[0.6em] mb-12">UNANGANISHWA NA ULIMWENGU • WWW FOR ALL</p>
+        <p className="text-[9px] font-black opacity-30 uppercase tracking-widest border-t border-gray-200 pt-10 inline-block">&copy; 2024 WIFI MTAANI SERVICES. HUDUMA BORA YA INTERNET.</p>
       </footer>
     </div>
   );

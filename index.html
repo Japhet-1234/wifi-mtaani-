@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WIFI MTAANI | Internet Yako, Mtaa Wako</title>
+    <title>WIFI MTAANI | Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -32,52 +32,20 @@
 </script>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800;900&display=swap');
-      
-      :root {
-        --mtaani-accent: #F57C00;
-      }
-
       body { 
         font-family: 'Plus Jakarta Sans', sans-serif; 
         background-color: #FAFAFA;
         margin: 0;
         padding: 0;
         min-height: 100vh;
-        scroll-behavior: smooth;
         -webkit-font-smoothing: antialiased;
       }
-
       .no-scrollbar::-webkit-scrollbar { display: none; }
-      
-      /* Custom selection color */
-      ::selection {
-        background: var(--mtaani-accent);
-        color: white;
-      }
-
-      /* Transitions for all interactive elements */
-      button, a, input {
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      /* Animated gradients for backgrounds */
-      .bg-mesh {
-        background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-                          radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-                          radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
-      }
-
-      /* Smooth animations */
-      @keyframes float {
-        0% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
-        100% { transform: translateY(0px); }
-      }
-      .animate-float { animation: float 6s ease-in-out infinite; }
+      button, input { transition: all 0.2s ease; }
     </style>
 </head>
 <body>
-    <div id="root" style="min-height: 100vh;"></div>
+    <div id="root"></div>
     <script type="module" src="index.tsx"></script>
 </body>
 </html>

@@ -2,9 +2,9 @@
 import { Package } from './types';
 
 export const INITIAL_PKGS: Package[] = [
-  { id: '1', name: 'Kifurushi cha Soko', duration: 'Masaa 4', price: 300, desc: 'Maalum kwa wafanyabiashara wadogo na wateja wa sokoni.' },
-  { id: '2', name: 'Kifurushi cha Stand', duration: 'Siku 1', price: 1000, desc: 'Kwa ajili ya wasafiri na madereva wanaoshinda stand.' },
-  { id: '3', name: 'Kifurushi cha Mtaa', duration: 'Wiki 1', price: 5000, desc: 'Internet ya kasi bila kikomo kwa vijiwe vyote vya mtaani.' }
+  { id: '1', name: 'Masaa Sita (6)', duration: '6 Hours', price: 500, desc: 'Internet ya kasi bila kikomo kwa masaa 6.' },
+  { id: '2', name: 'Masaa 24', duration: '24 Hours', price: 1000, desc: 'Internet ya kasi bila kikomo kwa siku nzima.' },
+  { id: '3', name: 'Wiki Nzima', duration: '7 Days', price: 5000, desc: 'Internet ya kasi bila kikomo kwa wiki nzima.' }
 ];
 
 export const ROUTER_LOGIN_TEMPLATE = `<!DOCTYPE html>
